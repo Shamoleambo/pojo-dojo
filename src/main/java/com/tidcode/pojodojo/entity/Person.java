@@ -2,6 +2,7 @@ package com.tidcode.pojodojo.entity;
 
 public class Person {
 
+	private Long id;
 	private String firstName;
 	private String lastName;
 	private Integer age;
@@ -10,10 +11,19 @@ public class Person {
 
 	}
 
-	public Person(String firstName, String lastName, Integer age) {
+	public Person(Long id, String firstName, String lastName, Integer age) {
+		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.age = age;
+	}
+
+	public Long getId() {
+		return this.id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getFirstName() {
