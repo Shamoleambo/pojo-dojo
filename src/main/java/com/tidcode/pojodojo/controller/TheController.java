@@ -3,6 +3,9 @@ package com.tidcode.pojodojo.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +41,22 @@ public class TheController {
 
 	@GetMapping("/person/{id}")
 	public Person getSinglePerson(@PathVariable int id) {
+
+		if (id >= this.people.size() || id < 0) {
+			throw new PersonNotFoundException("Person Id not found " + id);
+		}
 		return this.people.get(id);
+	}
+
+	@ExceptionHandler
+	public ResponseEntity<PersonErrorResponse> handleException(PersonNotFoundException e) {
+		PersonErrorResponse errorResponse = new PersonErrorResponse();
+
+		errorResponse.setMessage(e.getMessage());
+		errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
+		errorResponse.setTimestamp(System.currentTimeMillis());
+
+		return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
 	}
 
 }
